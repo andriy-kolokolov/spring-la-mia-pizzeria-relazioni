@@ -4,10 +4,9 @@ package com.example.experis.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.*;
-import org.hibernate.validator.constraints.URL;
 
 import java.math.BigDecimal;
-import java.util.regex.Pattern;
+import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -38,4 +37,8 @@ public class Pizza {
     @NotNull(message = "Price is required")
     @DecimalMin(value = "0.00", message = "Price must be positive")
     private BigDecimal price;
+
+    @OneToMany(mappedBy = "pizza", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SpecialOffer> specialOffers;
+
 }

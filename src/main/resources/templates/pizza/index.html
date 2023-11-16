@@ -64,13 +64,20 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="pizza : ${pizzas}">
+        <tr th:each="pizza : ${pizzas}" th:classappend="${#arrays.isEmpty(pizza.specialOffers)} ? '' : 'table-success'">
             <td th:text="${pizza.id}"></td>
             <td th:text="${pizza.name}"></td>
             <td th:text="${pizza.description}"></td>
             <td th:text="${pizza.url}"></td>
             <td th:text="${pizza.price}"></td>
             <td>
+                <!-- Special Offers List -->
+                <div th:if="${#arrays.isEmpty(pizza.specialOffers)}">
+                    <ul>
+                        <li th:each="offer : ${pizza.specialOffers}" th:text="${offer.title} + ' (' + ${offer.startDate} + ' - ' + ${offer.endDate} + ')'"></li>
+                    </ul>
+                </div>
+                <a th:href="@{/special-offer/create(pizzaId=${pizza.id})}" class="btn btn-info">Create Special Offer</a>
                 <a th:href="@{/pizza/{id}(id=${pizza.id})}" class="btn btn-primary">Show</a>
                 <a th:href="@{/pizza/edit/{id}(id=${pizza.id})}" class="btn btn-primary">Edit</a>
                 <form th:action="@{/pizza/delete/{id}(id=${pizza.id})}" method="post" style="display: inline-block;">

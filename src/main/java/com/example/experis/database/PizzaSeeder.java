@@ -56,7 +56,12 @@ public class PizzaSeeder {
 
                 BigDecimal price = BigDecimal.valueOf(faker.number().randomDouble(2, 5, 30));
 
-                Pizza pizza = new Pizza(null, name, description, url, price);
+                Pizza pizza = new Pizza();
+                pizza.setName(name);
+                pizza.setDescription(description);
+                pizza.setUrl(url);
+                pizza.setPrice(price);
+
                 pizzaRepository.save(pizza);
             }
         };
