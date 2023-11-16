@@ -63,7 +63,7 @@ public class SpecialOfferController {
         existingOffer.setTitle(offer.getTitle());
         specialOfferService.saveOffer(existingOffer);
 
-        redirectAttributes.addFlashAttribute("successMessage", "Special offer updated successfully!");
+        redirectAttributes.addFlashAttribute("message", "Special offer updated successfully!");
         return "redirect:/pizza/" + existingOffer.getPizza().getId();
     }
 
@@ -72,7 +72,7 @@ public class SpecialOfferController {
         SpecialOffer offer = specialOfferService.findById(id);
         if (offer != null) {
             specialOfferService.delete(offer);
-            redirectAttributes.addFlashAttribute("successMessage", "Special offer deleted successfully!");
+            redirectAttributes.addFlashAttribute("message", "Special offer deleted successfully!");
         } else {
             redirectAttributes.addFlashAttribute("errorMessage", "Special offer not found.");
         }
