@@ -1,5 +1,7 @@
 package com.example.experis.controller;
 
+import com.example.experis.model.Ingredient;
+import com.example.experis.service.IngredientService;
 import com.example.experis.service.PizzaService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,17 +13,21 @@ import org.springframework.web.bind.annotation.*;
 import com.example.experis.model.Pizza;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/pizza")
 public class PizzaController {
 
     private final PizzaService pizzaService;
+    private final IngredientService ingredientService;
 
     @Autowired
-    public PizzaController(PizzaService pizzaService) {
+    public PizzaController(PizzaService pizzaService, IngredientService ingredientService) {
         this.pizzaService = pizzaService;
+        this.ingredientService = ingredientService;
     }
 
     @GetMapping()
@@ -81,11 +87,15 @@ public class PizzaController {
     @GetMapping("/edit/{id}")
     public String editForm(@PathVariable Long id, Model model) {
         Pizza pizza = pizzaService.getPizzaById(id);
+        List<Ingredient> ingredients = ingredientService.getAll();
+
         if (pizza == null) {
             return "redirect:/pizza";
         }
         model.addAttribute("pizza", pizza);
+        model.addAttribute("ingredients", ingredients);
         model.addAttribute("route", "pizza");
+
         return "pizza/edit";
     }
 
@@ -95,6 +105,7 @@ public class PizzaController {
             @ModelAttribute @Valid Pizza pizza,
             BindingResult bindingResult,
             Model model,
+            @RequestParam(required = false) List<Long> ingredients,
             RedirectAttributes redirectAttributes
     ) {
         if (bindingResult.hasErrors()) {
@@ -113,7 +124,20 @@ public class PizzaController {
         existingPizza.setUrl(pizza.getUrl());
         existingPizza.setPrice(pizza.getPrice());
 
+        // Handle ingredients
+        Set<Ingredient> selectedIngredients = new HashSet<>();
+        if (ingredients != null) {
+            for (Long ingredientId : ingredients) {
+                Ingredient ingredient = ingredientService.getIngredientById(ingredientId);
+                if (ingredient != null) {
+                    selectedIngredients.add(ingredient);
+                }
+            }
+        }
+        existingPizza.setIngredients(selectedIngredients);
+
         pizzaService.save(existingPizza); // Save the updated pizza
+
         redirectAttributes.addFlashAttribute("message", "Pizza updated successfully!");
         return "redirect:/pizza";
     }

@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class IngredientSeeder {
 
+    private final IngredientRepository ingredientRepository;
+
     private static final String[] INGREDIENTS = {
             "Mozzarella", "Tomato Sauce", "Pepperoni", "Onions",
             "Green Peppers", "Mushrooms", "Sausage", "Bacon",
@@ -16,8 +18,12 @@ public class IngredientSeeder {
             "Feta Cheese", "Gouda Cheese", "Roquefort Cheese", "Camembert Cheese",
     };
 
+    public IngredientSeeder(IngredientRepository ingredientRepository) {
+        this.ingredientRepository = ingredientRepository;
+    }
+
     @Bean
-    CommandLineRunner ingredientSeederRunner(IngredientRepository ingredientRepository) {
+    CommandLineRunner seedIngredients() {
         return args -> {
             long count = ingredientRepository.count();
             if (count >= INGREDIENTS.length) {

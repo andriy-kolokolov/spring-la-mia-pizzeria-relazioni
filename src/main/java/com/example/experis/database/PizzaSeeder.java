@@ -4,6 +4,7 @@ package com.example.experis.database;
 import com.example.experis.model.Pizza;
 import com.example.experis.repository.PizzaRepository;
 import com.github.javafaker.Faker;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,6 +17,10 @@ import java.util.stream.IntStream;
 
 @Configuration
 public class PizzaSeeder {
+
+    private final PizzaRepository pizzaRepository;
+
+    private static final Random random = new Random();
 
     private static final String[] INGREDIENTS = {
             "Mozzarella", "Tomato Sauce", "Pepperoni", "Onions",
@@ -32,10 +37,12 @@ public class PizzaSeeder {
             "Chicken Delight", "Chicken Tikka Masala",
     };
 
-    private static final Random random = new Random();
+    public PizzaSeeder(PizzaRepository pizzaRepository) {
+        this.pizzaRepository = pizzaRepository;
+    }
 
     @Bean
-    CommandLineRunner pizzaSeederRunner(PizzaRepository pizzaRepository) {
+    CommandLineRunner seedPizzas() {
         return args -> {
             long count = pizzaRepository.count();
             if (count >= PIZZA_NAMES.length) {

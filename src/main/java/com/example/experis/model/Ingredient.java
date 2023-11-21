@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
+import java.util.Set;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -21,4 +23,11 @@ public class Ingredient {
     @Column(nullable = false)
     @NotBlank(message = "Name is required")
     private String name;
+
+    @ManyToMany(
+            mappedBy = "ingredients",
+            cascade = { CascadeType.MERGE, CascadeType.PERSIST }
+    )
+    private Set<Pizza> pizzas;
+
 }
