@@ -27,6 +27,16 @@
                             Pizzas
                         </a>
                     </li>
+
+                    <!-- Ingredients Link -->
+                    <li class="nav-item ms-nav-link">
+                        <a
+                                th:classappend="${route == 'ingredient' ? 'active' : ''}"
+                                class="nav-link" th:href="@{/ingredient}"
+                        >
+                            Ingredients
+                        </a>
+                    </li>
                 </ul>
                 </ul>
             </div>

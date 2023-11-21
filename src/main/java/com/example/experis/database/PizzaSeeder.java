@@ -35,7 +35,7 @@ public class PizzaSeeder {
     private static final Random random = new Random();
 
     @Bean
-    CommandLineRunner commandLineRunner(PizzaRepository pizzaRepository) {
+    CommandLineRunner pizzaSeederRunner(PizzaRepository pizzaRepository) {
         return args -> {
             long count = pizzaRepository.count();
             if (count >= PIZZA_NAMES.length) {
